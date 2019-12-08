@@ -1,0 +1,86 @@
+---
+title: "Tidyverse Assignment"
+author: "Maryluz Cruz"
+date: "12/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load the Tidyverse Package
+
+```{r}
+require(tidyverse)
+```
+
+#### Tidyverse::readr
+
+- Using readr to read in the csv file.
+
+```{r}
+avengers<-read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/avengers/avengers.csv",col_names = TRUE)
+```
+
+Data used for this Assignment is from fivethirtyeight Avengers.csv https://github.com/fivethirtyeight/data/blob/master/avengers/avengers.csv
+
+
+```{r}
+str(avengers)
+```
+
+#### Tidyverse::dplyr - filter
+
+- Use filter to filter out the number of apperences that are over 1000
+
+```{r}
+avengers_1000_over<-filter(avengers,Appearances>1000)
+avengers_1000_over
+```
+
+- Filter out the the Avengers that are Current
+
+```{r}
+avengers_current<-filter(avengers_1000_over,`Current?`=="YES")
+avengers_current
+```
+
+#### Tidyverse::dplyr - group_by
+
+```{r}
+avengers_current %>%
+  group_by(`Name/Alias`)%>%
+  summarise(Year)
+
+```
+
+#### Tidyverse::dplyr - select
+
+- Here you can select the columns that you want from the table
+
+```{r}
+avengers_new_table<-avengers_current%>%
+  select(`Name/Alias`,Year,Gender,Appearances, `Years since joining`)
+avengers_new_table
+```
+
+#### Tidyverse::dplyr - arrange
+
+- Arrange the columns by the number of Appearances in Descending order
+
+```{r}
+arrange(avengers_new_table,desc(Appearances))
+```
+
+#### Tidyverse::dplyr - mutate with arrange
+
+- Calculate the Average of Appearances and Years since joining and arrange it by Appearances in descending order
+
+```{r}
+avengers_new_table%>%
+  mutate(Year_Over_Appearances= Appearances/`Years since joining`)%>%
+  arrange(desc(Appearances))
+```
+
+
